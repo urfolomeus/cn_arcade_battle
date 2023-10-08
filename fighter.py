@@ -14,6 +14,7 @@ class Fighter():
         self.update_time = pygame.time.get_ticks()
         self.rect = pygame.Rect((x, y, 80, 180))
         self.vel_y = 0
+        self.running = False
         self.jump = False
         self.attacking = False
         self.attack_type = 0
@@ -44,6 +45,9 @@ class Fighter():
         dx = 0
         dy = 0
 
+        self.running = False
+        self.attack_type = 0
+
         # get keypresses
         key = pygame.key.get_pressed()
 
@@ -51,8 +55,10 @@ class Fighter():
             # movement
             if key[pygame.K_a]:
                 dx = -SPEED
+                self.running = True
             if key[pygame.K_d]:
                 dx = SPEED
+                self.running = True
 
             # jump
             if key[pygame.K_w] and not self.jump:
@@ -93,6 +99,18 @@ class Fighter():
         self.rect.y += dy
 
     def update(self):
+        # order is important here
+        # I think because some actions block others
+        if self.attacking:
+            # attack_type_1 == 3 and acttack_type_2 = 4
+            self.update_action(2 + self.attack_type)
+        elif self.jump:
+            self.update_action(2)
+        elif self.running:
+            self.update_action(1)
+        else:
+            self.update_action(0)
+
         animation_cooldown = 50
         self.image = self.animation_list[self.action][self.frame_index]
         if pygame.time.get_ticks() - self.update_time > animation_cooldown:
@@ -115,6 +133,12 @@ class Fighter():
 
         # DELETE ME!!
         pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
+
+    def update_action(self, new_action):
+        if new_action != self.action:
+            self.action = new_action
+            self.frame_index = 0
+            self.update_time = pygame.time.get_ticks()
 
     def draw(self, surface):
         img = pygame.transform.flip(self.image, self.flip, False)
