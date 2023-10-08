@@ -19,6 +19,7 @@ class Fighter():
         self.attacking = False
         self.attack_type = 0
         self.attack_cooldown = 0
+        self.hit = False
         self.health = 100
 
     def load_images(self, sprite_sheet, animation_steps):
@@ -106,7 +107,9 @@ class Fighter():
     def update(self):
         # order is important here
         # I think because some actions block others
-        if self.attacking:
+        if self.hit:
+            self.update_action(5)
+        elif self.attacking:
             # attack_type_1 == 3 and acttack_type_2 = 4
             if self.attack_type == 1:
                 self.update_action(3)
@@ -129,6 +132,12 @@ class Fighter():
             if self.action == 3 or self.action == 4:
                 self.attacking = False
                 self.attack_cooldown = 20
+            if self.action == 5:
+                self.hit = False
+                # if the player was in the middle of an attack
+                # then the attack is stopped
+                self.attacking = False
+                self.attack_cooldown = 20
 
     def attack(self, surface, target):
         if self.attack_cooldown == 0:
@@ -142,6 +151,7 @@ class Fighter():
 
             if attacking_rect.colliderect(target.rect):
                 target.health -= 10
+                target.hit = True
 
             # DELETE ME!!
             pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
