@@ -21,6 +21,7 @@ class Fighter():
         self.attack_cooldown = 0
         self.hit = False
         self.health = 100
+        self.alive = True
 
     def load_images(self, sprite_sheet, animation_steps):
         # extract images from sprite sheet
@@ -107,7 +108,11 @@ class Fighter():
     def update(self):
         # order is important here
         # I think because some actions block others
-        if self.hit:
+        if self.health <= 0:
+            self.health = 0
+            self.alive = False
+            self.update_action(6)
+        elif self.hit:
             self.update_action(5)
         elif self.attacking:
             # attack_type_1 == 3 and acttack_type_2 = 4
@@ -128,16 +133,19 @@ class Fighter():
             self.frame_index += 1
             self.update_time = pygame.time.get_ticks()
         if self.frame_index >= len(self.animation_list[self.action]):
-            self.frame_index = 0
-            if self.action == 3 or self.action == 4:
-                self.attacking = False
-                self.attack_cooldown = 20
-            if self.action == 5:
-                self.hit = False
-                # if the player was in the middle of an attack
-                # then the attack is stopped
-                self.attacking = False
-                self.attack_cooldown = 20
+            if not self.alive:
+                self.frame_index = len(self.animation_list[self.action]) - 1
+            else:
+                self.frame_index = 0
+                if self.action == 3 or self.action == 4:
+                    self.attacking = False
+                    self.attack_cooldown = 20
+                if self.action == 5:
+                    self.hit = False
+                    # if the player was in the middle of an attack
+                    # then the attack is stopped
+                    self.attacking = False
+                    self.attack_cooldown = 20
 
     def attack(self, surface, target):
         if self.attack_cooldown == 0:
