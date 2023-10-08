@@ -7,7 +7,7 @@ class Fighter():
         self.jump = False
         self.attack_type = 0
 
-    def move(self, screen_width, screen_height, surface):
+    def move(self, screen_width, screen_height, surface, target):
         SPEED = 10
         GRAVITY = 2
         dx = 0
@@ -29,7 +29,7 @@ class Fighter():
 
         # attack
         if key[pygame.K_r] or key[pygame.K_t]:
-            self.attack(surface)
+            self.attack(surface, target)
 
             if key[pygame.K_r]:
                 self.attack_type = 1
@@ -54,12 +54,17 @@ class Fighter():
         self.rect.x += dx
         self.rect.y += dy
 
-    def attack(self, surface):
+    def attack(self, surface, target):
         attacking_rect = pygame.Rect(
             self.rect.centerx,
             self.rect.y,
             2 * self.rect.width,
             self.rect.height)
+
+        if attacking_rect.colliderect(target.rect):
+            print("HIT!!")
+
+        # DELETE ME!!
         pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
 
     def draw(self, surface):
