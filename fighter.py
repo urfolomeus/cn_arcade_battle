@@ -55,7 +55,7 @@ class Fighter():
         # get keypresses
         key = pygame.key.get_pressed()
 
-        if not self.attacking:
+        if not self.attacking and self.alive:
             if self.player == 1:
                 # movement
                 if key[pygame.K_a]:
