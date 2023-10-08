@@ -10,6 +10,11 @@ SCREEN_OPTS_HEIGHT = 600
 screen = pygame.display.set_mode((SCREEN_OPTS_WIDTH, SCREEN_OPTS_HEIGHT))
 pygame.display.set_caption("Cartoon Network Arcade Battle")
 
+# set framerate
+clock = pygame.time.Clock()
+FPS = 60
+
+
 # load bg image
 bg_image = pygame.image.load("./assets/images/background/background.jpg").convert_alpha()
 
@@ -27,6 +32,8 @@ fighter_2 = Fighter(700, 310)
 # game loop
 run = True
 while run:
+    clock.tick(FPS)
+
     # draw background
     draw_bg()
 
