@@ -4,10 +4,10 @@ from fighter import Fighter
 
 pygame.init()
 
-SCREEN_OPTS_WIDTH = 1000
-SCREEN_OPTS_HEIGHT = 600
+SCREEN_WIDTH = 1000
+SCREEN_HEIGHT = 600
 
-screen = pygame.display.set_mode((SCREEN_OPTS_WIDTH, SCREEN_OPTS_HEIGHT))
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Cartoon Network Arcade Battle")
 
 # set framerate
@@ -21,7 +21,7 @@ bg_image = pygame.image.load("./assets/images/background/background.jpg").conver
 
 # function for drawing background
 def draw_bg():
-    scaled_bg = pygame.transform.scale(bg_image, (SCREEN_OPTS_WIDTH, SCREEN_OPTS_HEIGHT))
+    scaled_bg = pygame.transform.scale(bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
     screen.blit(scaled_bg, (0, 0))
 
 
@@ -38,7 +38,7 @@ while run:
     draw_bg()
 
     # move fighters
-    fighter_1.move(SCREEN_OPTS_WIDTH)
+    fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT)
 
     # draw fighters
     fighter_1.draw(screen)
