@@ -103,7 +103,10 @@ class Fighter():
         # I think because some actions block others
         if self.attacking:
             # attack_type_1 == 3 and acttack_type_2 = 4
-            self.update_action(2 + self.attack_type)
+            if self.attack_type == 1:
+                self.update_action(3)
+            elif self.attack_type == 2:
+                self.update_action(4)
         elif self.jump:
             self.update_action(2)
         elif self.running:
@@ -118,6 +121,8 @@ class Fighter():
             self.update_time = pygame.time.get_ticks()
         if self.frame_index >= len(self.animation_list[self.action]):
             self.frame_index = 0
+            if self.action == 3 or self.action == 4:
+                self.attacking = False
 
     def attack(self, surface, target):
         self.attacking = True
