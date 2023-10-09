@@ -12,6 +12,10 @@ YELLOW = (255, 255, 0)
 RED = (255, 0, 0)
 WHITE = (255, 255, 255)
 
+# define game variables
+intro_count = 3
+last_count_update = pygame.time.get_ticks()
+
 # define fighter variables
 WARRIOR_SIZE = 162
 WARRIOR_SCALE = 4
@@ -41,6 +45,16 @@ wizard_sheet = pygame.image.load("./assets/images/wizard/Sprites/wizard.png").co
 # define number of steps in each animation
 WARRIOR_ANIMATION_STEPS = [10, 8, 1, 7, 7, 3, 7]
 WIZARD_ANIMATION_STEPS = [8, 8, 1, 8, 8, 3, 7]
+
+# define font
+count_fount = pygame.font.Font("./assets/fonts/turok.ttf", 80)
+score_fount = pygame.font.Font("./assets/fonts/turok.ttf", 30)
+
+
+# function for drawing text
+def draw_text(text, font, text_col, x, y):
+    img = font.render(text, True, text_col)
+    screen.blit(img, (x, y))
 
 
 # function for drawing background
@@ -73,9 +87,25 @@ while run:
     draw_health_bar(fighter_1.health, 20, 20)
     draw_health_bar(fighter_2.health, 580, 20)
 
-    # move fighters
-    fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2)
-    fighter_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1)
+    # update countdown
+    if intro_count <= 0:
+        # move fighters
+        fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2)
+        fighter_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1)
+    else:
+        # display count timer
+        draw_text(
+            str(intro_count),
+            count_fount,
+            RED,
+            SCREEN_WIDTH / 2,
+            SCREEN_HEIGHT / 3
+        )
+
+        # update count timer
+        if (pygame.time.get_ticks() - last_count_update) >= 1000:
+            intro_count -= 1
+            last_count_update = pygame.time.get_ticks()
 
     # update fighters
     fighter_1.update()
