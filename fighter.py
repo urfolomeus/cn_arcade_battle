@@ -43,7 +43,7 @@ class Fighter():
 
         return animation_list
 
-    def move(self, screen_width, screen_height, surface, target):
+    def move(self, screen_width, screen_height, surface, target, round_over):
         SPEED = 10
         GRAVITY = 2
         dx = 0
@@ -55,7 +55,7 @@ class Fighter():
         # get keypresses
         key = pygame.key.get_pressed()
 
-        if not self.attacking and self.alive:
+        if not self.attacking and self.alive and not round_over:
             if self.player == 1:
                 # movement
                 if key[pygame.K_a]:
