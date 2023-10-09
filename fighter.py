@@ -72,7 +72,7 @@ class Fighter():
 
                 # attack
                 if key[pygame.K_r] or key[pygame.K_t]:
-                    self.attack(surface, target)
+                    self.attack(target)
 
                     if key[pygame.K_r]:
                         self.attack_type = 1
@@ -171,7 +171,7 @@ class Fighter():
                     self.attacking = False
                     self.attack_cooldown = 20
 
-    def attack(self, surface, target):
+    def attack(self, target):
         if self.attack_cooldown == 0:
             self.attacking = True
 
@@ -185,9 +185,6 @@ class Fighter():
                 target.health -= 10
                 target.hit = True
 
-            # DELETE ME!!
-            pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
-
     def update_action(self, new_action):
         if new_action != self.action:
             self.action = new_action
@@ -200,5 +197,4 @@ class Fighter():
             self.rect.x - (self.offset[0] * self.image_scale),
             self.rect.y - (self.offset[1] * self.image_scale)
         )
-        pygame.draw.rect(surface, (255, 0, 0), self.rect)
         surface.blit(img, coords)
