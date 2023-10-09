@@ -2,6 +2,7 @@ import pygame
 
 from fighter import Fighter
 
+pygame.mixer.init()
 pygame.init()
 
 SCREEN_WIDTH = 1000
@@ -37,6 +38,16 @@ pygame.display.set_caption("Cartoon Network Arcade Battle")
 clock = pygame.time.Clock()
 FPS = 60
 
+# load music and sounds
+pygame.mixer.music.load("./assets/audio/music.mp3")
+pygame.mixer.music.set_volume(0.5)
+pygame.mixer.music.play(-1, 0.0, 5000)
+
+sword_fx = pygame.mixer.Sound("./assets/audio/sword.wav")
+sword_fx.set_volume(0.5)
+
+magic_fx = pygame.mixer.Sound("./assets/audio/magic.wav")
+magic_fx.set_volume(0.75)
 
 # load bg image
 bg_image = pygame.image.load("./assets/images/background/background.jpg").convert_alpha()
@@ -78,8 +89,8 @@ def draw_health_bar(health, x, y):
 
 
 # create two instances of fighter
-fighter_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS)
-fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS)
+fighter_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, sword_fx)
+fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, magic_fx)
 
 # game loop
 run = True
@@ -139,9 +150,8 @@ while run:
             round_over = False
             intro_count = 3
             # reset fighters by just creating new ones
-            fighter_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS)
-            fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS)
-
+            fighter_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, sword_fx)
+            fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, magic_fx)
 
     # event handler
     for event in pygame.event.get():
