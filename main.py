@@ -1,42 +1,31 @@
 import pygame
 
+from config import (
+    FPS,
+    RED,
+    ROUND_OVER_COOLDOWN,
+    SCREEN_WIDTH,
+    SCREEN_HEIGHT,
+    WARRIOR_ANIMATION_STEPS,
+    WARRIOR_DATA,
+    WHITE,
+    WIZARD_ANIMATION_STEPS,
+    WIZARD_DATA,
+    YELLOW)
 from fighter import Fighter
+from game import Game
 
 pygame.mixer.init()
 pygame.init()
 
-SCREEN_WIDTH = 1000
-SCREEN_HEIGHT = 600
-
-# define colors
-YELLOW = (255, 255, 0)
-RED = (255, 0, 0)
-WHITE = (255, 255, 255)
-
 # define game variables
-intro_count = 3
-last_count_update = pygame.time.get_ticks()
-score = [0, 0]
-round_over = False
-ROUND_OVER_COOLDOWN = 2000
-
-# define fighter variables
-WARRIOR_SIZE = 162
-WARRIOR_SCALE = 4
-WARRIOR_OFFSET = [72, 56]
-WARRIOR_DATA = [WARRIOR_SIZE, WARRIOR_SCALE, WARRIOR_OFFSET]
-
-WIZARD_SIZE = 250
-WIZARD_SCALE = 3
-WIZARD_OFFSET = [112, 107]
-WIZARD_DATA = [WIZARD_SIZE, WIZARD_SCALE, WIZARD_OFFSET]
+game = Game()
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Cartoon Network Arcade Battle")
 
 # set framerate
 clock = pygame.time.Clock()
-FPS = 60
 
 # load music and sounds
 pygame.mixer.music.load("./assets/audio/music.mp3")
@@ -58,10 +47,6 @@ wizard_sheet = pygame.image.load("./assets/images/wizard/Sprites/wizard.png").co
 
 # load victory image
 victory_img = pygame.image.load("./assets/images/icons/victory.png").convert_alpha()
-
-# define number of steps in each animation
-WARRIOR_ANIMATION_STEPS = [10, 8, 1, 7, 7, 3, 7]
-WIZARD_ANIMATION_STEPS = [8, 8, 1, 8, 8, 3, 7]
 
 # define font
 count_fount = pygame.font.Font("./assets/fonts/turok.ttf", 80)
@@ -103,18 +88,18 @@ while run:
     # show player stats
     draw_health_bar(fighter_1.health, 20, 20)
     draw_health_bar(fighter_2.health, 580, 20)
-    draw_text("P1: " + str(score[0]), score_fount, RED, 20, 60)
-    draw_text("P2: " + str(score[1]), score_fount, RED, 580, 60)
+    draw_text("P1: " + str(game.score[0]), score_fount, RED, 20, 60)
+    draw_text("P2: " + str(game.score[1]), score_fount, RED, 580, 60)
 
     # update countdown
-    if intro_count <= 0:
+    if game.intro_count <= 0:
         # move fighters
-        fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, round_over)
-        fighter_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, round_over)
+        fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, game.round_over)
+        fighter_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, game.round_over)
     else:
         # display count timer
         draw_text(
-            str(intro_count),
+            str(game.intro_count),
             count_fount,
             RED,
             SCREEN_WIDTH / 2,
@@ -122,9 +107,9 @@ while run:
         )
 
         # update count timer
-        if (pygame.time.get_ticks() - last_count_update) >= 1000:
-            intro_count -= 1
-            last_count_update = pygame.time.get_ticks()
+        if (pygame.time.get_ticks() - game.last_count_update) >= 1000:
+            game.intro_count -= 1
+            game.last_count_update = pygame.time.get_ticks()
 
     # update fighters
     fighter_1.update()
@@ -135,20 +120,20 @@ while run:
     fighter_2.draw(screen)
 
     # check for player defeat
-    if not round_over:
+    if not game.round_over:
         if not fighter_1.alive:
-            score[1] += 1
-            round_over = True
+            game.score[1] += 1
+            game.round_over = True
             round_over_time = pygame.time.get_ticks()
         elif not fighter_2.alive:
-            score[0] += 1
-            round_over = True
+            game.score[0] += 1
+            game.round_over = True
             round_over_time = pygame.time.get_ticks()
     else:
         screen.blit(victory_img, (360, 150))
         if pygame.time.get_ticks() - round_over_time > ROUND_OVER_COOLDOWN:
-            round_over = False
-            intro_count = 3
+            game.round_over = False
+            game.intro_count = 3
             # reset fighters by just creating new ones
             fighter_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, sword_fx)
             fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, magic_fx)
