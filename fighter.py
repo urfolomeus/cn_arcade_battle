@@ -95,7 +95,7 @@ class Fighter():
 
                 # attack
                 if key[pygame.K_n] or key[pygame.K_m]:
-                    self.attack(surface, target)
+                    self.attack(target)
 
                     if key[pygame.K_n]:
                         self.attack_type = 1
