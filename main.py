@@ -49,8 +49,8 @@ wizard_sheet = pygame.image.load("./assets/images/wizard/Sprites/wizard.png").co
 victory_img = pygame.image.load("./assets/images/icons/victory.png").convert_alpha()
 
 # define font
-count_fount = pygame.font.Font("./assets/fonts/turok.ttf", 80)
-score_fount = pygame.font.Font("./assets/fonts/turok.ttf", 30)
+count_font = pygame.font.Font("./assets/fonts/turok.ttf", 80)
+score_font = pygame.font.Font("./assets/fonts/turok.ttf", 30)
 
 
 # function for drawing text
@@ -88,8 +88,8 @@ while run:
     # show player stats
     draw_health_bar(fighter_1.health, 20, 20)
     draw_health_bar(fighter_2.health, 580, 20)
-    draw_text("P1: " + str(game.score[0]), score_fount, RED, 20, 60)
-    draw_text("P2: " + str(game.score[1]), score_fount, RED, 580, 60)
+    draw_text("P1: " + str(game.score[0]), score_font, RED, 20, 60)
+    draw_text("P2: " + str(game.score[1]), score_font, RED, 580, 60)
 
     # update countdown
     if game.intro_count <= 0:
@@ -100,7 +100,7 @@ while run:
         # display count timer
         draw_text(
             str(game.intro_count),
-            count_fount,
+            count_font,
             RED,
             SCREEN_WIDTH / 2,
             SCREEN_HEIGHT / 3
