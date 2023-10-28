@@ -12,14 +12,12 @@ from themes import DEFAULT_THEME
 from audio import Audio
 from fighter import Fighter
 from game import Game
+from screen import Screen
 
 pygame.init()
 
 # define game variables
 game = Game()
-
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Cartoon Network Arcade Battle")
 
 # set framerate
 clock = pygame.time.Clock()
@@ -27,36 +25,16 @@ clock = pygame.time.Clock()
 # set theme
 theme = DEFAULT_THEME
 
+# set up the screen
+screen = Screen(theme)
+
 # load music and sounds
 audio = Audio.setup(theme)
 
-# load images
-bg_image = pygame.image.load(theme["background"]).convert_alpha()
-victory_image = pygame.image.load(theme["victory"]).convert_alpha()
 
 # define font
 count_font = pygame.font.Font("./assets/fonts/turok.ttf", 80)
 score_font = pygame.font.Font("./assets/fonts/turok.ttf", 30)
-
-
-# function for drawing text
-def draw_text(text, font, text_col, x, y):
-    img = font.render(text, True, text_col)
-    screen.blit(img, (x, y))
-
-
-# function for drawing background
-def draw_bg():
-    scaled_bg = pygame.transform.scale(bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
-    screen.blit(scaled_bg, (0, 0))
-
-
-# function for drawing health bars
-def draw_health_bar(health, x, y):
-    ratio = health / 100
-    pygame.draw.rect(screen, WHITE, (x - 2, y - 2, 404, 34))
-    pygame.draw.rect(screen, RED, (x, y, 400, 30))
-    pygame.draw.rect(screen, YELLOW, (x, y, 400 * ratio, 30))
 
 
 # create two instances of fighter
@@ -69,13 +47,13 @@ while run:
     clock.tick(FPS)
 
     # draw background
-    draw_bg()
+    screen.draw_bg()
 
     # show player stats
-    draw_health_bar(fighter_1.health, 20, 20)
-    draw_health_bar(fighter_2.health, 580, 20)
-    draw_text("P1: " + str(game.score[0]), score_font, RED, 20, 60)
-    draw_text("P2: " + str(game.score[1]), score_font, RED, 580, 60)
+    screen.draw_health_bar(fighter_1.health, 20, 20)
+    screen.draw_health_bar(fighter_2.health, 580, 20)
+    screen.draw_text("P1: " + str(game.score[0]), score_font, RED, 20, 60)
+    screen.draw_text("P2: " + str(game.score[1]), score_font, RED, 580, 60)
 
     # update countdown
     if game.intro_count <= 0:
@@ -84,7 +62,7 @@ while run:
         fighter_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, game.round_over)
     else:
         # display count timer
-        draw_text(
+        screen.draw_text(
             str(game.intro_count),
             count_font,
             RED,
@@ -102,8 +80,8 @@ while run:
     fighter_2.update()
 
     # draw fighters
-    fighter_1.draw(screen)
-    fighter_2.draw(screen)
+    fighter_1.draw(screen.screen)
+    fighter_2.draw(screen.screen)
 
     # check for player defeat
     if not game.round_over:
@@ -116,7 +94,7 @@ while run:
             game.round_over = True
             round_over_time = pygame.time.get_ticks()
     else:
-        screen.blit(victory_image, (360, 150))
+        screen.draw_victory(360, 150)
         if pygame.time.get_ticks() - round_over_time > ROUND_OVER_COOLDOWN:
             game.round_over = False
             game.intro_count = 3
