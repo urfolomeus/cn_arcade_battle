@@ -5,48 +5,53 @@ from audio import Audio
 
 class Fighter():
     def __init__(self, player, x, y, theme):
-        self.theme = theme
-        sprite_sheet = pygame.image.load(
-            self.theme["sprite_sheet"]
-        ).convert_alpha()
-        self.keys = self.theme["keys"]
         self.player = player
-        self.size = self.theme["size"]
-        self.image_scale = self.theme["scale"]
-        self.offset = self.theme["offset"]
-        self.flip = player == 2
-        self.animation_list = self.load_images(
-            sprite_sheet, self.theme["animation_steps"])
+        self.x = x
+        self.y = y
+
+        self.keys = theme["keys"]
+        self.image_scale = theme["scale"]
+        self.offset = theme["offset"]
+
+        self.animation_list = self.load_images(theme)
+        self.attack_sound = Audio.set_sound_effects(
+            theme["sound"]["fx"], theme["sound"]["volume"])
+
+        self.reset()
+
+    def reset(self):
+        self.rect = pygame.Rect((self.x, self.y, 80, 180))
+        self.flip = self.player == 2
         # 0:idle 1:run 2:jump 3:attack1 4:attack2 5:hit 6:death
         self.action = 0
         self.frame_index = 0
         self.image = self.animation_list[self.action][self.frame_index]
         self.update_time = pygame.time.get_ticks()
-        self.rect = pygame.Rect((x, y, 80, 180))
         self.vel_y = 0
         self.running = False
         self.jump = False
         self.attacking = False
         self.attack_type = 0
         self.attack_cooldown = 0
-        self.attack_sound = Audio.set_sound_effects(
-            self.theme["sound"]["fx"], self.theme["sound"]["volume"])
         self.hit = False
         self.health = 100
         self.alive = True
 
-    def load_images(self, sprite_sheet, animation_steps):
+    def load_images(self, theme):
         # extract images from sprite sheet
+        sprite_sheet = pygame.image.load(theme["sprite_sheet"]).convert_alpha()
         animation_list = []
+        size = theme["size"]
 
-        for y, animation in enumerate(animation_steps):
+        for y, animation in enumerate(theme["animation_steps"]):
             temp_img_list = []
 
             for x in range(animation):
-                temp_img = sprite_sheet.subsurface(x * self.size, y * self.size, self.size, self.size)
+                temp_img = sprite_sheet.subsurface(
+                    x * size, y * size, size, size)
                 scaled_img = pygame.transform.scale(
                     temp_img,
-                    (self.size * self.image_scale, self.size * self.image_scale)
+                    (size * self.image_scale, size * self.image_scale)
                 )
                 temp_img_list.append(scaled_img)
 

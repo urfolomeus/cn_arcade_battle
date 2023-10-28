@@ -96,9 +96,8 @@ while run:
         if pygame.time.get_ticks() - round_over_time > ROUND_OVER_COOLDOWN:
             game.round_over = False
             game.intro_count = 3
-            # reset fighters by just creating new ones
-            fighter_1 = Fighter(1, 200, 310, theme["fighter_1"])
-            fighter_2 = Fighter(2, 700, 310, theme["fighter_2"])
+            fighter_1.reset()
+            fighter_2.reset()
 
     # event handler
     for event in pygame.event.get():
