@@ -1,15 +1,21 @@
 import pygame
 
+from audio import Audio
+
 
 class Fighter():
-    def __init__(self, player, x, y, flip, data, sprite_sheet, animation_steps, sound):
+    def __init__(self, player, x, y, theme):
+        sprite_sheet = pygame.image.load(theme["sprite_sheet"]).convert_alpha()
+
         self.player = player
-        self.size = data[0]
-        self.image_scale = data[1]
-        self.offset = data[2]
-        self.flip = flip
-        self.animation_list = self.load_images(sprite_sheet, animation_steps)
-        self.action = 0  # 0:idle 1:run 2:jump 3:attack1 4:attack2 5:hit 6:death
+        self.size = theme["size"]
+        self.image_scale = theme["scale"]
+        self.offset = theme["offset"]
+        self.flip = player == 2
+        self.animation_list = self.load_images(
+            sprite_sheet, theme["animation_steps"])
+        # 0:idle 1:run 2:jump 3:attack1 4:attack2 5:hit 6:death
+        self.action = 0
         self.frame_index = 0
         self.image = self.animation_list[self.action][self.frame_index]
         self.update_time = pygame.time.get_ticks()
@@ -20,7 +26,8 @@ class Fighter():
         self.attacking = False
         self.attack_type = 0
         self.attack_cooldown = 0
-        self.attack_sound = sound
+        self.attack_sound = Audio.set_sound_effects(
+            theme["sound"]["fx"], theme["sound"]["volume"])
         self.hit = False
         self.health = 100
         self.alive = True

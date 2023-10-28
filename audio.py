@@ -2,14 +2,13 @@ import pygame
 
 
 class Audio:
-    def __init__(self):
+    def setup(theme):
         pygame.mixer.init()
-        pygame.mixer.music.load("./assets/audio/music.mp3")
-        pygame.mixer.music.set_volume(0.5)
+        pygame.mixer.music.load(theme["music"]["url"])
+        pygame.mixer.music.set_volume(theme["music"]["volume"])
         pygame.mixer.music.play(-1, 0.0, 5000)
 
-        self.sword_fx = pygame.mixer.Sound("./assets/audio/sword.wav")
-        self.sword_fx.set_volume(0.5)
-
-        self.magic_fx = pygame.mixer.Sound("./assets/audio/magic.wav")
-        self.magic_fx.set_volume(0.75)
+    def set_sound_effects(url, volume):
+        sound_fx = pygame.mixer.Sound(url)
+        sound_fx.set_volume(volume)
+        return sound_fx

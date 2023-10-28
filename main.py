@@ -6,16 +6,12 @@ from config import (
     ROUND_OVER_COOLDOWN,
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
-    WARRIOR_ANIMATION_STEPS,
-    WARRIOR_DATA,
     WHITE,
-    WIZARD_ANIMATION_STEPS,
-    WIZARD_DATA,
     YELLOW)
+from themes import DEFAULT_THEME
 from audio import Audio
 from fighter import Fighter
 from game import Game
-from images import Images
 
 pygame.init()
 
@@ -28,15 +24,15 @@ pygame.display.set_caption("Cartoon Network Arcade Battle")
 # set framerate
 clock = pygame.time.Clock()
 
+# set theme
+theme = DEFAULT_THEME
+
 # load music and sounds
-audio = Audio()
+audio = Audio.setup(theme)
 
 # load images
-images = Images()
-bg_image = images.bg_image()
-warrior_sheet = images.warrior_sheet()
-wizard_sheet = images.wizard_sheet()
-victory_image = images.victory_image()
+bg_image = pygame.image.load(theme["background"]).convert_alpha()
+victory_image = pygame.image.load(theme["victory"]).convert_alpha()
 
 # define font
 count_font = pygame.font.Font("./assets/fonts/turok.ttf", 80)
@@ -64,8 +60,8 @@ def draw_health_bar(health, x, y):
 
 
 # create two instances of fighter
-fighter_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, audio.sword_fx)
-fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, audio.magic_fx)
+fighter_1 = Fighter(1, 200, 310, theme["fighter_1"])
+fighter_2 = Fighter(2, 700, 310, theme["fighter_2"])
 
 # game loop
 run = True
@@ -125,8 +121,8 @@ while run:
             game.round_over = False
             game.intro_count = 3
             # reset fighters by just creating new ones
-            fighter_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, audio.sword_fx)
-            fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, audio.magic_fx)
+            fighter_1 = Fighter(1, 200, 310, theme["fighter_1"])
+            fighter_2 = Fighter(2, 700, 310, theme["fighter_2"])
 
     # event handler
     for event in pygame.event.get():
