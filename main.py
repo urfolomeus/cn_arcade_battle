@@ -5,9 +5,7 @@ from config import (
     RED,
     ROUND_OVER_COOLDOWN,
     SCREEN_WIDTH,
-    SCREEN_HEIGHT,
-    WHITE,
-    YELLOW)
+    SCREEN_HEIGHT)
 from themes import DEFAULT_THEME
 from audio import Audio
 from fighter import Fighter
@@ -58,8 +56,8 @@ while run:
     # update countdown
     if game.intro_count <= 0:
         # move fighters
-        fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, game.round_over)
-        fighter_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, game.round_over)
+        fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, fighter_2, game.round_over)
+        fighter_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, fighter_1, game.round_over)
     else:
         # display count timer
         screen.draw_text(
