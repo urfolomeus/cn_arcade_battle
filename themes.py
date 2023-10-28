@@ -21,8 +21,8 @@ DEFAULT_THEME = {
             "left": pygame.K_a,
             "right": pygame.K_d,
             "jump": pygame.K_w,
-            "attack1": pygame.K_r,
-            "attack2": pygame.K_t
+            "attack_1": pygame.K_r,
+            "attack_2": pygame.K_t
         }
     },
     "fighter_2": {
@@ -39,8 +39,8 @@ DEFAULT_THEME = {
             "left": pygame.K_LEFT,
             "right": pygame.K_RIGHT,
             "jump": pygame.K_UP,
-            "attack1": pygame.K_n,
-            "attack2": pygame.K_m
+            "attack_1": pygame.K_n,
+            "attack_2": pygame.K_m
         }
     }
 }

@@ -5,15 +5,18 @@ from audio import Audio
 
 class Fighter():
     def __init__(self, player, x, y, theme):
-        sprite_sheet = pygame.image.load(theme["sprite_sheet"]).convert_alpha()
-
+        self.theme = theme
+        sprite_sheet = pygame.image.load(
+            self.theme["sprite_sheet"]
+        ).convert_alpha()
+        self.keys = self.theme["keys"]
         self.player = player
-        self.size = theme["size"]
-        self.image_scale = theme["scale"]
-        self.offset = theme["offset"]
+        self.size = self.theme["size"]
+        self.image_scale = self.theme["scale"]
+        self.offset = self.theme["offset"]
         self.flip = player == 2
         self.animation_list = self.load_images(
-            sprite_sheet, theme["animation_steps"])
+            sprite_sheet, self.theme["animation_steps"])
         # 0:idle 1:run 2:jump 3:attack1 4:attack2 5:hit 6:death
         self.action = 0
         self.frame_index = 0
@@ -27,7 +30,7 @@ class Fighter():
         self.attack_type = 0
         self.attack_cooldown = 0
         self.attack_sound = Audio.set_sound_effects(
-            theme["sound"]["fx"], theme["sound"]["volume"])
+            self.theme["sound"]["fx"], self.theme["sound"]["volume"])
         self.hit = False
         self.health = 100
         self.alive = True
@@ -64,50 +67,26 @@ class Fighter():
         key = pygame.key.get_pressed()
 
         if not self.attacking and self.alive and not round_over:
-            if self.player == 1:
-                # movement
-                if key[pygame.K_a]:
-                    dx = -SPEED
-                    self.running = True
-                if key[pygame.K_d]:
-                    dx = SPEED
-                    self.running = True
+            # movement
+            if key[self.keys["left"]]:
+                dx = -SPEED
+                self.running = True
+            if key[self.keys["right"]]:
+                dx = SPEED
+                self.running = True
 
-                # jump
-                if key[pygame.K_w] and not self.jump:
-                    self.vel_y = -30
-                    self.jump = True
+            # jump
+            if key[self.keys["jump"]] and not self.jump:
+                self.vel_y = -30
+                self.jump = True
 
-                # attack
-                if key[pygame.K_r] or key[pygame.K_t]:
-                    self.attack(target)
-
-                    if key[pygame.K_r]:
-                        self.attack_type = 1
-                    if key[pygame.K_t]:
-                        self.attack_type = 2
-            elif self.player == 2:
-                # movement
-                if key[pygame.K_LEFT]:
-                    dx = -SPEED
-                    self.running = True
-                if key[pygame.K_RIGHT]:
-                    dx = SPEED
-                    self.running = True
-
-                # jump
-                if key[pygame.K_UP] and not self.jump:
-                    self.vel_y = -30
-                    self.jump = True
-
-                # attack
-                if key[pygame.K_n] or key[pygame.K_m]:
-                    self.attack(target)
-
-                    if key[pygame.K_n]:
-                        self.attack_type = 1
-                    if key[pygame.K_m]:
-                        self.attack_type = 2
+            # attack
+            if key[self.keys["attack_1"]]:
+                self.attack(target)
+                self.attack_type = 1
+            if key[self.keys["attack_2"]]:
+                self.attack(target)
+                self.attack_type = 2
 
         # apply gravity
         self.vel_y += GRAVITY
