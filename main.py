@@ -12,10 +12,11 @@ from config import (
     WIZARD_ANIMATION_STEPS,
     WIZARD_DATA,
     YELLOW)
+from audio import Audio
 from fighter import Fighter
 from game import Game
+from images import Images
 
-pygame.mixer.init()
 pygame.init()
 
 # define game variables
@@ -28,25 +29,14 @@ pygame.display.set_caption("Cartoon Network Arcade Battle")
 clock = pygame.time.Clock()
 
 # load music and sounds
-pygame.mixer.music.load("./assets/audio/music.mp3")
-pygame.mixer.music.set_volume(0.5)
-pygame.mixer.music.play(-1, 0.0, 5000)
+audio = Audio()
 
-sword_fx = pygame.mixer.Sound("./assets/audio/sword.wav")
-sword_fx.set_volume(0.5)
-
-magic_fx = pygame.mixer.Sound("./assets/audio/magic.wav")
-magic_fx.set_volume(0.75)
-
-# load bg image
-bg_image = pygame.image.load("./assets/images/background/background.jpg").convert_alpha()
-
-# load sprite sheets
-warrior_sheet = pygame.image.load("./assets/images/warrior/Sprites/warrior.png").convert_alpha()
-wizard_sheet = pygame.image.load("./assets/images/wizard/Sprites/wizard.png").convert_alpha()
-
-# load victory image
-victory_img = pygame.image.load("./assets/images/icons/victory.png").convert_alpha()
+# load images
+images = Images()
+bg_image = images.bg_image()
+warrior_sheet = images.warrior_sheet()
+wizard_sheet = images.wizard_sheet()
+victory_image = images.victory_image()
 
 # define font
 count_font = pygame.font.Font("./assets/fonts/turok.ttf", 80)
@@ -74,8 +64,8 @@ def draw_health_bar(health, x, y):
 
 
 # create two instances of fighter
-fighter_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, sword_fx)
-fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, magic_fx)
+fighter_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, audio.sword_fx)
+fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, audio.magic_fx)
 
 # game loop
 run = True
@@ -130,13 +120,13 @@ while run:
             game.round_over = True
             round_over_time = pygame.time.get_ticks()
     else:
-        screen.blit(victory_img, (360, 150))
+        screen.blit(victory_image, (360, 150))
         if pygame.time.get_ticks() - round_over_time > ROUND_OVER_COOLDOWN:
             game.round_over = False
             game.intro_count = 3
             # reset fighters by just creating new ones
-            fighter_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, sword_fx)
-            fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, magic_fx)
+            fighter_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, audio.sword_fx)
+            fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, audio.magic_fx)
 
     # event handler
     for event in pygame.event.get():
