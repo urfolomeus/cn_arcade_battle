@@ -4,7 +4,7 @@ from config import (
     FPS,
     RED,
     ROUND_OVER_COOLDOWN)
-from themes import DEFAULT_THEME
+from themes import CLARENCE_THEME
 from audio import Audio
 from fighter import Fighter
 from game import Game
@@ -19,7 +19,7 @@ game = Game()
 clock = pygame.time.Clock()
 
 # set theme
-theme = DEFAULT_THEME
+theme = CLARENCE_THEME
 
 # set up the screen
 screen = Screen(theme)
