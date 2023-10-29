@@ -1,6 +1,8 @@
 import pygame
 
 DEFAULT_THEME = {
+    "screen_width": 1000,
+    "screen_height": 600,
     "background": "./assets/images/background/background.jpg",
     "victory": "./assets/images/icons/victory.png",
     "music": {

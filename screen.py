@@ -1,11 +1,14 @@
 import pygame
 
-from config import (RED, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE, YELLOW)
+from config import (RED, WHITE, YELLOW)
 
 
 class Screen(object):
     def __init__(self, theme):
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.screen_width = theme["screen_width"]
+        self.screen_height = theme["screen_height"]
+        self.screen = pygame.display.set_mode(
+            (self.screen_width, self.screen_height))
         pygame.display.set_caption("Cartoon Network Arcade Battle")
 
         # load images
@@ -20,7 +23,7 @@ class Screen(object):
     # function for drawing background
     def draw_bg(self):
         scaled_bg = pygame.transform.scale(
-            self.bg_img, (SCREEN_WIDTH, SCREEN_HEIGHT))
+            self.bg_img, (self.screen_width, self.screen_height))
         self.screen.blit(scaled_bg, (0, 0))
 
     # function for drawing health bars

@@ -3,9 +3,7 @@ import pygame
 from config import (
     FPS,
     RED,
-    ROUND_OVER_COOLDOWN,
-    SCREEN_WIDTH,
-    SCREEN_HEIGHT)
+    ROUND_OVER_COOLDOWN)
 from themes import DEFAULT_THEME
 from audio import Audio
 from fighter import Fighter
@@ -25,6 +23,8 @@ theme = DEFAULT_THEME
 
 # set up the screen
 screen = Screen(theme)
+screen_width = theme["screen_width"]
+screen_height = theme["screen_height"]
 
 # load music and sounds
 audio = Audio.setup(theme)
@@ -56,16 +56,16 @@ while run:
     # update countdown
     if game.intro_count <= 0:
         # move fighters
-        fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, fighter_2, game.round_over)
-        fighter_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, fighter_1, game.round_over)
+        fighter_1.move(screen_width, screen_height, fighter_2, game.round_over)
+        fighter_2.move(screen_width, screen_height, fighter_1, game.round_over)
     else:
         # display count timer
         screen.draw_text(
             str(game.intro_count),
             count_font,
             RED,
-            SCREEN_WIDTH / 2,
-            SCREEN_HEIGHT / 3
+            screen_width / 2,
+            screen_height / 3
         )
 
         # update count timer
